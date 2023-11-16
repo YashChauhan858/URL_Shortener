@@ -61,3 +61,29 @@ export const getURLInfoById = async (req, res, next) => {
     next(error);
   }
 };
+
+export const deleteURLInfoById = async (req, res, next) => {
+  try {
+    const shortId = req.params.id;
+    if (!shortId) {
+      res.status(400).json({ message: "please provide short id" });
+    }
+    const entry = await URL.findOneAndDelete({
+      shortId,
+    });
+    if (entry) {
+      res.status(200).json({
+        title: "Success",
+        message: "Deleted Successful",
+        shortId: entry.shortId,
+      });
+    } else {
+      res.status(400).json({
+        title: "Failed",
+        message: "Invalid Id",
+      });
+    }
+  } catch (error) {
+    next(error);
+  }
+};
